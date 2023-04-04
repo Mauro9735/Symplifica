@@ -26,9 +26,9 @@ public class Product {
     @Column
     private Integer currentStock;
 
-    @OneToMany(mappedBy = "products",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy ="product",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Product> products = new HashSet<>();
+    private Set<Order> orders = new HashSet<>();
 
 
     public Product(Integer id, String name, String description, String price, Integer currentStock){
@@ -92,12 +92,11 @@ public class Product {
         this.currentStock = currentStock;
     }
 
-    public Set<Product> getProducts() {
-        return products;
+    public Set<Order> getOrders() {
+        return orders;
     }
 
-    public void setProducts(Set<Product> products) {
-        this.products = products;
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
     }
-
 }
