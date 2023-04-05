@@ -4,13 +4,14 @@ import com.test.SymplificaTest.entity.Order;
 import com.test.SymplificaTest.service.OrderService;
 import com.test.SymplificaTest.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/order")
+@Controller
+@RequestMapping("/orders")
 public class OrderController {
 
     private OrderService orderService;
@@ -25,15 +26,35 @@ public class OrderController {
     }
 
 
-    @GetMapping
-    public ResponseEntity<List<Order>> OrdersList(){
-        return ResponseEntity.ok(orderService.ordersList());
+    @GetMapping()
+    public String OrdersList(Model model){
+        model.addAttribute("orders",orderService.ordersList());
+        return "symplifica";
     }
 
-    @PostMapping
-    public ResponseEntity<Order> saveOrder(@RequestBody Order order) {
-        return ResponseEntity.ok(orderService.saveOrder(order));
+
+    @GetMapping("/newOrder")
+    public String createOrder(Model model){
+        Order order = new Order();
+        model.addAttribute("order",order);
+        model.addAttribute("products",productService.productsList());
+        return  "orderNew";
     }
 
+
+
+//
+    @PostMapping()
+    public String saveOrder (@ModelAttribute("order") Order order){
+        orderService.saveOrder(order);
+        return "redirect:/orders";
+    }
+
+
+    @GetMapping("/{id}")
+    public String deleteOrder(@PathVariable Integer id){
+        orderService.deleteOrder(id);
+        return "redirect:/orders";
+    }
 
 }
